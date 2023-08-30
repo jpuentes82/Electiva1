@@ -1,0 +1,117 @@
+MainActivity.kt 
+
+package com.example.numberguessinggame
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import kotlin.random.Random
+
+
+class MainActivity : AppCompatActivity() {
+    private var numeroAdivinar: Int = 0
+    private var intentos: Int = 0
+    private lateinit var textView: TextView
+    private lateinit var editText: EditText
+    private lateinit var button: Button
+    private lateinit var resultTextView: TextView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        textView = findViewById(R.id.textView)
+        editText = findViewById(R.id.editText)
+        button = findViewById(R.id.button)
+        resultTextView = findViewById(R.id.resultTextView)
+
+        iniciarJuego()
+
+        button.setOnClickListener {
+            verificarIntento()
+        }
+    }
+
+    private fun iniciarJuego() {
+        val random = Random(System.currentTimeMillis())
+        numeroAdivinar = random.nextInt(1000) + 1
+        intentos = 0
+        textView.text = "Adivina el número de 1 a 1000"
+        resultTextView.text = ""
+        editText.setText("")
+        editText.isEnabled = true
+        button.isEnabled = true
+    }
+
+    private fun verificarIntento() {
+        val intento = editText.text.toString().toInt()
+        intentos++
+
+        when {
+            intento == numeroAdivinar -> {
+                editText.isEnabled = false
+                button.isEnabled = false
+                resultTextView.text = "¡Ganaste en $intentos intentos!"
+            }
+            intento < numeroAdivinar -> {
+                resultTextView.text = "El número es más alto. Intento #$intentos"
+            }
+            else -> {
+                resultTextView.text = "¡Ganaste en $intentos intentos!"
+            }
+        }
+    }
+}
+
+
+
+
+
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".MainActivity">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adivina el número de 1 a 1000" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ingresa tu intento" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Intentar" />
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
